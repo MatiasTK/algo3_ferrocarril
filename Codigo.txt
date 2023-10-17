@@ -1,0 +1,44 @@
+ViajePromocional{
+    instanceVariableNames: 'pasajes descuento vigente'
+
+    agregarPasaje: unPasaje
+        pasajes add: unPasaje.
+
+    calcularPrecioPromocional
+        | total |
+        vigente esVigente ifFalse: [ ViajeNoVigente new signal ].
+        total := 0.
+        pasajes do: [ :p |  total := total + p calcularPrecio ].
+        ^ total * descuento.
+
+    initialize
+        	pasajes := OrderedCollection new.
+        	descuento := 0.8.
+
+    registrarViajePromocionalConPasaje: unPasaje conVigencia: unaVigencia
+    	self agregarPasaje: unPasaje.
+    	vigente := unaVigencia.
+}
+
+Exception ViajeNoVigente{}
+
+ViajePromocionalTest{
+    testPuedoViajarConPromocional
+    	| tren categoria tramo pasaje vigencia viaje total|
+
+    	tren := TrenAltaVelocidad registrar: 500.
+    	categoria := CategoriaPrimera registrar: 1000.
+    	tramo := Tramo registrarConTren: tren conCategoria: categoria.
+    	pasaje := Pasaje registrarPasaje: tramo.
+    	vigencia := VigenciaPermanente new.
+    	viaje := ViajePromocional registrarViajePromocionalConPasaje: pasaje conVigencia: vigencia.
+
+    	"Precio tramo"
+    	total := 500 + 1000.
+    	"Precio tramo y pasaje"
+    	total := total * 1.
+    	"Precio viaje final con descuento"
+    	total := total * 0.8.
+
+    	self assert: viaje calcularPrecioPromocional equals: total.
+}

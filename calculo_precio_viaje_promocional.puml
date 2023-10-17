@@ -1,0 +1,30 @@
+@startuml
+title "Calculo del precio de un viaje promocional"
+actor TestCase
+create "tren:TrenAltaVelocidad"
+TestCase -> "tren:TrenAltaVelocidad": registrar(500)
+create "categoria: CategoriaPrimera"
+TestCase -> "categoria: CategoriaPrimera": registrar(1000)
+create "paris: Tramo"
+TestCase -> "paris: Tramo": registrarTramo(tren,categoria)
+create "viajeParis: Pasaje"
+TestCase -> "viajeParis: Pasaje": registrarPasaje(paris)
+create "vigencia: VigenciaPermanente"
+TestCase -> "vigencia: VigenciaPermanente": registrarVigencia()
+create ViajePromocional
+TestCase -> ViajePromocional: registrarViaje(viajeParis, vigencia)
+TestCase -> ViajePromocional: calcularPrecioPromocional()
+ViajePromocional -> "vigencia: VigenciaPermanente": esVigente()
+"vigencia: VigenciaPermanente" --> ViajePromocional: true
+ViajePromocional -> "viajeParis: Pasaje": calcularPrecioTodosLosTramos()
+"viajeParis: Pasaje" -> "paris: Tramo": calcularPrecio()
+"paris: Tramo" -> "tren:TrenAltaVelocidad": calcularPrecioTren()
+"tren:TrenAltaVelocidad" --> "paris: Tramo": precioTren = 500
+"paris: Tramo" -> "categoria: CategoriaPrimera": calcularPrecioCategoria()
+"categoria: CategoriaPrimera" --> "paris: Tramo": precioCategoria = 1000
+"paris: Tramo" --> "viajeParis: Pasaje": precioTramo = 500 + 1000
+"viajeParis: Pasaje" -> "paris: Tramo": obtenerCantidadPasajeros()
+"paris: Tramo" --> "viajeParis: Pasaje": 1
+"viajeParis: Pasaje" --> ViajePromocional: precioPasaje = 1500 * 1
+ViajePromocional --> TestCase: totalConDescuento = 1500*0.8via
+@enduml

@@ -1,0 +1,106 @@
+@startuml
+interface Tren{
+    + calcularPrecioTren()
+}
+
+class TrenAltaVelocidad {
+    - precioBaseTramo: double
+    + calcularPrecioTren(): double
+    + TrenAltaVelocidad(precioBase: double)
+}
+
+class TrenNocturno {
+    - precioBaseTramo: double
+    + calcularPrecioTren(): double
+    + TrenNocturno(precioBase: double)
+}
+
+class TrenComun {
+    - precioBaseTramo: double
+    + calcularPrecioTren(): double
+    + TrenComun(precioBase: double)
+}
+
+interface Categoria{
+    + calcularPrecioCategoria()
+}
+
+class CategoriaPrimera {
+    - precioBaseCategoria: double
+    + calcularPrecioCategoria(): double
+    + CategoriaPrimera(precioBase: double)
+}
+
+class CategoriaSegunda {
+    - precioBaseCategoria: double
+    + calcularPrecioCategoria(): double
+    + CategoriaSegunda(precioBase: double)
+}
+
+class Tramo {
+  - nombreTramo: String
+  - cantidadPasajeros: double
+  + calcularPrecio(): double
+  + obtenerCantidadPasajeros(): int
+  + Tramo(tren: Tren, categoria: Categoria)
+  + Tramo(tren: Tren, categoria: Categoria, servicio: ServicioAdicional)
+  + esIgualA(otroTramo: String)
+}
+
+class ServicioAdicional {
+  - precio: double
+  - descripcion: string
+  + calcularPrecioServicio(): double
+}
+
+class Pasaje {
+  + calcularPrecio(tramo: String): double
+  + calcularPrecioTodosLosTramos(): double
+  - buscarTramo(tramo: String)
+  + agregarTramo(tramo: Tramo)
+  + Pasaje(tramo: Tramo)
+}
+
+class ViajePromocional {
+  - descuento: int
+  + calcularPrecioPromocional(): double
+  + ViajePromocional(pasaje: Pasaje, vigencia: Vigencia)
+  + agregarPasaje(pasaje: Pasaje)
+}
+
+interface Vigencia{
+    + esVigente()
+}
+
+class VigenciaPermanente{
+    + esVigente(): boolean
+}
+
+class VigenciaEstacion{
+    + esVigente(): boolean
+}
+
+class VigenciaDiaSemana{
+    + esVigente(): boolean
+}
+
+class VigenciaFinDeSemana{
+    + esVigente(): boolean
+}
+
+Tramo "1..*"<-"1" Pasaje
+ServicioAdicional "0..1" <-- Tramo
+ViajePromocional "1"-->"1..*" Pasaje
+Tren <|-. TrenAltaVelocidad
+Tren <|-. TrenComun
+Tren <|-. TrenNocturno
+Categoria <|-. CategoriaPrimera
+Categoria <|-. CategoriaSegunda
+Tramo --> Tren
+Tramo --> Categoria
+Vigencia <|-. VigenciaPermanente
+Vigencia <|-. VigenciaDiaSemana
+Vigencia <|-. VigenciaFinDeSemana
+Vigencia <|-. VigenciaEstacion
+ViajePromocional -> Vigencia
+@enduml

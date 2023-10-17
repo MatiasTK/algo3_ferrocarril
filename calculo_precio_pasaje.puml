@@ -1,0 +1,25 @@
+@startuml
+title "Calculo del precio de un pasaje"
+actor TestCase
+create "tren:TrenComun"
+TestCase -> "tren:TrenComun": registrar(200)
+create "categoria: CategoriaSegunda"
+TestCase -> "categoria: CategoriaSegunda": registrar(500)
+create "tramoBuenosAires: Tramo"
+TestCase -> "tramoBuenosAires: Tramo": registrarTramo(tren,categoria)
+create Pasaje
+TestCase -> Pasaje: registrarPasaje(tramoBuenosAires)
+TestCase -> Pasaje: calcularPrecio("Buenos Aires")
+Pasaje -> Pasaje: buscarTramo("Buenos Aires")
+Pasaje -> "tramoBuenosAires: Tramo": esIgualA("Buenos Aires")
+Pasaje -> "tramoBuenosAires: Tramo": calcularPrecio()
+"tramoBuenosAires: Tramo" -> "tren:TrenComun": calcularPrecioTren()
+"tren:TrenComun" --> "tramoBuenosAires: Tramo": precioTren = 200
+"tramoBuenosAires: Tramo" -> "categoria: CategoriaSegunda": calcularPrecioCategoria()
+"categoria: CategoriaSegunda"--> "tramoBuenosAires: Tramo": precioCategoria = 500
+"tramoBuenosAires: Tramo" --> Pasaje: precioTramo = 200 + 500
+Pasaje -> "tramoBuenosAires: Tramo": obtenerCantidadPasajeros()
+"tramoBuenosAires: Tramo" --> Pasaje: 1
+Pasaje --> TestCase: precioFinal = 700*1
+@enduml
+

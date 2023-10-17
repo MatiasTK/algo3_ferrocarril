@@ -1,0 +1,9 @@
+@startuml
+loop "Por cada pasaje"
+    ViajePromocional -> "viajeParis: Pasaje": calcularPrecioTodosLosTramos()
+    loop "Por cada tramo"
+        "viajeParis: Pasaje" -> "paris: Tramo": calcularPrecio()
+
+    end
+end
+@enduml
